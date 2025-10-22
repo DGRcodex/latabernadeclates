@@ -1,0 +1,43 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Next.js build output
+/.next
+/out
+
+# Production build artifacts
+/build
+
+# Static exports
+/export
+
+# Misc
+.DS_Store
+*.pem
+
+# Environment Variables
+# Ensures local environment variables are ignored by Git
+.env.local
+.env.development.local
+.env.production.local
+.env.test.local
+
+# Editor directories and files
+.idea
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-workspace
+
+# Optional Files
+.npm
+.eslintcache
+.stylelintcache
+*.tsbuildinfo

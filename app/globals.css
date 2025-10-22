@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Opcional: un scrollbar más estilizado */
+body::-webkit-scrollbar {
+  width: 8px;
+}
+body::-webkit-scrollbar-track {
+  background: #2d3748; /* gray-800 */
+}
+body::-webkit-scrollbar-thumb {
+  background-color: #f6e05e; /* yellow-400 */
+  border-radius: 20px;
+}
