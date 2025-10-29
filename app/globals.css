@@ -1,15 +1,42 @@
+/* app/globals.css */
+
+/* 1) Directivas base de Tailwind (deben ir antes de cualquier @layer) */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Opcional: un scrollbar más estilizado */
-body::-webkit-scrollbar {
-  width: 8px;
+/* 2) Ajustes globales opcionales */
+:root {
+  color-scheme: dark;
 }
-body::-webkit-scrollbar-track {
-  background: #2d3748; /* gray-800 */
+
+html {
+  -webkit-font-smoothing: antialiased;
 }
-body::-webkit-scrollbar-thumb {
-  background-color: #f6e05e; /* yellow-400 */
-  border-radius: 20px;
+
+/* 3) Utilidades personalizadas */
+@layer utilities {
+
+  /* Grid mobile con mínimos 30% de viewport y variación por spans */
+  .grid-mobile-safe {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(30vw, 1fr));
+    /* Unidad de fila base = 15vh; así row-span:2 => 30vh mínimo */
+    grid-auto-rows: 15vh;
+    grid-auto-flow: dense;
+    gap: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .grid-mobile-safe {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-auto-rows: 12rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .grid-mobile-safe {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+  }
 }

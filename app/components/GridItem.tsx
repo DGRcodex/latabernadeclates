@@ -1,57 +1,76 @@
-// app/components/GridItem.tsx
-'use client'; // Para los efectos de hover de Framer Motion
+// components/GridItem.tsx
+'use client';
 
-import { urlFor } from '@/lib/sanity.image'; // (Necesitas crear este helper)
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { urlFor } from '@/lib/sanity.image';
 
-// Variante para el item individual
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-};
-
-// Helper para determinar la URL
-const getHref = (item: any) => {
-  if (item._type === 'publicacion') {
-    return `/ensayos/${item.slug.current}`; // Asumiendo que tienes esta ruta
-  }
-  if (item._type === 'obraTaller') {
-    return `/obras/${item.slug.current}`; // Asumiendo que tienes esta ruta
-  }
+function getHref(item: any) {
+  if (item?._type === 'publicacion') return `/ensayos/${item.slug?.current}`;
+  if (item?._type === 'obraTaller') return `/obras/${item.slug?.current}`;
   return '/';
-};
+}
 
-export function GridItem({ item, className }: { item: any; className: string }) {
-  const imageUrl = item.imagen_portada ? urlFor(item.imagen_portada).width(400).height(400).url() : null;
+export function GridItem({ item, className }: { item: any; className?: string }) {
+  const [isMobile, setIsMobile] = useState(true);
+
+  // Spans aleatorios por recarga, solo mobile
+  // col 1–2, row 2–3 para respetar 30vw x 30vh mínimos
+  const mobileSpanRef = useRef<{ col: number; row: number } | null>(null);
+  if (!mobileSpanRef.current) {
+    const col = Math.random() < 0.35 ? 2 : 1;       // ~35% más anchas
+    const row = 2 + (Math.random() < 0.5 ? 1 : 0);  // 2 o 3 filas
+    mobileSpanRef.current = { col, row };
+  }
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 640px)');
+    const handler = () => setIsMobile(!mq.matches);
+    handler();
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  const { col, row } = mobileSpanRef.current!;
 
   return (
-    <motion.div
-      className={`relative rounded-lg overflow-hidden group ${className}`}
-      variants={itemVariants}
-      whileHover={{ scale: 1.03 }} // Efecto de zoom experimental
+    <div
+      className={`relative rounded-2xl overflow-hidden ${className ?? ''}`}
+      style={
+        isMobile
+          ? {
+              gridColumn: `span ${col} / span ${col}`,
+              gridRow: `span ${row} / span ${row}`,
+            }
+          : undefined
+      }
     >
       <Link href={getHref(item)} className="block w-full h-full">
-        {/* Capa de Imagen */}
-        {imageUrl ? (
-          <Image
-            src={imageUrl}
-            alt={item.titulo}
-            width={400}
-            height={400}
-            className="object-cover w-full h-full"
-          />
-        ) : (
-          <div className="w-full h-full bg-gray-700" /> // Placeholder
-        )}
+        <div
+          className="relative w-full h-full"
+          style={isMobile ? { minHeight: `${row * 15}vh` } : undefined}
+        >
+          {item?.imagen_portada ? (
+            <Image
+              src={urlFor(item.imagen_portada)!.width(1600).height(1000).url()}
+              alt={item?.titulo ?? 'Publicación'}
+              fill
+              className="object-cover"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              priority={false}
+            />
+          ) : (
+            <div className="w-full h-full bg-neutral-800" />
+          )}
+        </div>
 
-        {/* Capa de Texto (Aparece al hacer hover) */}
-        <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-          <span className="text-xs uppercase text-yellow-400">{item.tipo}</span>
-          <h3 className="text-lg font-bold text-white">{item.titulo}</h3>
+        {/* Overlay solo desktop */}
+        <div className="pointer-events-none absolute inset-0 hidden sm:flex sm:flex-col sm:justify-end sm:p-4 sm:bg-black/60 sm:opacity-0 sm:hover:opacity-100 transition-opacity">
+          {!!item?.tipo && <span className="text-xs uppercase text-yellow-400">{item.tipo}</span>}
+          {!!item?.titulo && <h3 className="text-lg font-semibold text-white">{item.titulo}</h3>}
         </div>
       </Link>
-    </motion.div>
+    </div>
   );
 }
