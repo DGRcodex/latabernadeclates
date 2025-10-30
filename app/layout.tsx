@@ -1,3 +1,4 @@
+// app/layout.tsx
 import './globals.css';
 import { SidebarProvider } from './context/SidebarContext';
 import { Header } from './components/Header';
@@ -11,25 +12,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <SidebarProvider>
-        <body className="bg-gray-900 text-white min-h-screen">
-          
-          {/* El Header con el botón de toggle */}
+      <body className="bg-gray-900 text-white min-h-screen">
+        <SidebarProvider>
+          {/* Header fijo (altura h-20 = 80px) */}
           <Header />
 
-          {/* El Sidebar (ahora es un Client Component) */}
-          {/* Le pasamos el contenido del sidebar (un Server Component) como 'children' */}
+          {/* Sidebar (Client) con contenido (Server) */}
           <Sidebar>
             <SidebarContent />
           </Sidebar>
 
-          {/* El contenido principal (el Escritorio Caótico) */}
-          <main className="pt-20 p-6 md:p-8"> {/* pt-20 para dejar espacio al Header fijo */}
+          {/* Contenido principal: offset para no quedar bajo el header */}
+          <main className="pt-nav p-6 md:p-8">
             {children}
           </main>
-          
-        </body>
-      </SidebarProvider>
+        </SidebarProvider>
+      </body>
     </html>
   );
 }

@@ -1,28 +1,74 @@
 /* app/globals.css */
 
-/* 1) Directivas base de Tailwind (deben ir antes de cualquier @layer) */
+/* Tailwind base */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* 2) Ajustes globales opcionales */
+/* ----- Ajustes globales y variables ----- */
 :root {
   color-scheme: dark;
+  /* Altura base del header fijo en móvil (h-20 = 80px) + notch-safe */
+  --nav-h: calc(80px + env(safe-area-inset-top, 0px));
+}
+
+/* Aumenta la altura efectiva del offset en pantallas mayores,
+   en sintonía con h-24 (96px) y h-28 (112px) del Header */
+@media (min-width: 768px) {
+  :root {
+    --nav-h: 96px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --nav-h: 112px;
+  }
 }
 
 html {
   -webkit-font-smoothing: antialiased;
 }
 
-/* 3) Utilidades personalizadas */
+/* ----- Utilities personalizadas ----- */
 @layer utilities {
+
+  .spacer-after-header-sm {
+      height: 24px;
+    }
+  
+    /* ~mt-6 */
+    .spacer-after-header-md {
+      height: 32px;
+    }
+  
+    /* ~mt-8 */
+  
+    /* Si tu Sidebar es fixed, estas ayudan a que NO quede tapado por el header */
+    .top-after-header {
+      top: var(--nav-h);
+    }
+  
+    .h-below-header {
+      height: calc(100vh - var(--nav-h));
+    }
+
+  /* Offset global para no quedar bajo el header fijo */
+  .pt-nav {
+    padding-top: var(--nav-h);
+  }
+
+  /* Útil si haces scroll a #anclas en títulos */
+  .anchor-safe {
+    scroll-margin-top: var(--nav-h);
+  }
 
   /* Grid mobile con mínimos 30% de viewport y variación por spans */
   .grid-mobile-safe {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(30vw, 1fr));
-    /* Unidad de fila base = 15vh; así row-span:2 => 30vh mínimo */
     grid-auto-rows: 15vh;
+    /* row-span:2 => 30vh */
     grid-auto-flow: dense;
     gap: 1rem;
   }
@@ -38,5 +84,64 @@ html {
     .grid-mobile-safe {
       grid-template-columns: repeat(6, minmax(0, 1fr));
     }
+  }
+}
+
+/* ----- Components (botones, tipografía, glass, share, toasts) ----- */
+@layer components {
+  .btn {
+    @apply inline-flex items-center rounded-xl px-4 py-2 text-sm transition;
+  }
+
+  .btn-primary {
+    @apply bg-white/10 border border-white/10 hover:bg-white/20;
+  }
+
+  .article {
+    @apply prose prose-invert prose-lg max-w-3xl mx-auto;
+  }
+
+  /* Glass card container */
+  .card-glass {
+    @apply rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-4 sm:p-5 shadow-lg shadow-black/20;
+  }
+
+  /* Share button: pill, glass, focus ring accesible */
+  .btn-share {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm text-white/90 border border-white/10 bg-white/5 hover:bg-white/10 active:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30 transition;
+  }
+
+  /* Floating share bar style */
+  .floating-share {
+    @apply flex items-center gap-2 rounded-full border border-white/10 bg-black/60 backdrop-blur px-3.5 py-2 shadow-lg shadow-black/30;
+  }
+
+  /* Mini toast used by ShareBar copy */
+  .toast-mini {
+    @apply fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] px-3 py-1.5 text-sm text-white/90 rounded-full bg-black/70 border border-white/10;
+    animation: toast-pop 1.2s ease both;
+  }
+}
+
+/* ----- Animaciones ----- */
+@keyframes toast-pop {
+  0% {
+    transform: translate(-50%, 10px);
+    opacity: 0;
+  }
+
+  20% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+
+  80% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-50%, 10px);
+    opacity: 0;
   }
 }
