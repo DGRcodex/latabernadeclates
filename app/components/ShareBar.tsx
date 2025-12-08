@@ -41,13 +41,13 @@ export default function ShareBar({ title, excerpt, tags = [], urlOverride }: Pro
   const baseText = excerpt?.trim()?.length ? `${title} — ${excerpt}` : title;
   const hash = tags.filter(Boolean).map(t => t.replace(/^#/, '')).join(',');
 
-  const xUrl  = `https://twitter.com/intent/tweet?text=${encode(baseText)}&url=${encode(siteUrl)}${hash ? `&hashtags=${encode(hash)}` : ''}`;
-  const bsky  = `https://bsky.app/intent/compose?text=${encode(`${baseText} ${siteUrl}`)}`;
+  const xUrl = `https://twitter.com/intent/tweet?text=${encode(baseText)}&url=${encode(siteUrl)}${hash ? `&hashtags=${encode(hash)}` : ''}`;
+  const bsky = `https://bsky.app/intent/compose?text=${encode(`${baseText} ${siteUrl}`)}`;
   const liUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encode(siteUrl)}`;
   const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encode(siteUrl)}`;
   const waUrl = `https://api.whatsapp.com/send?text=${encode(`${baseText}\n\n${siteUrl}`)}`;
   const tgUrl = `https://t.me/share/url?url=${encode(siteUrl)}&text=${encode(baseText)}`;
-  const mail  = `mailto:?subject=${encode(title)}&body=${encode(`${baseText}\n\n${siteUrl}`)}`;
+  const mail = `mailto:?subject=${encode(title)}&body=${encode(`${baseText}\n\n${siteUrl}`)}`;
 
   const canWebShare = typeof navigator !== 'undefined' && !!navigator.share;
 
@@ -60,19 +60,19 @@ export default function ShareBar({ title, excerpt, tags = [], urlOverride }: Pro
       el.className = 'toast-mini';
       document.body.appendChild(el);
       setTimeout(() => el.remove(), 1200);
-    } catch {}
+    } catch { }
   };
 
   const handleWebShare = async () => {
     try {
       if (canWebShare) await navigator.share({ title, text: baseText, url: siteUrl });
-    } catch {}
+    } catch { }
   };
 
   return (
     <section className="mt-8">
-      <div className="card-glass">
-        <div className="flex items-center gap-2 text-sm text-white/80 mb-3">
+      <div className="card-brutal">
+        <div className="flex items-center gap-2 text-sm font-bold uppercase mb-3 text-black">
           <Share2 className="h-4 w-4" />
           <span className="font-medium">Compartir</span>
         </div>

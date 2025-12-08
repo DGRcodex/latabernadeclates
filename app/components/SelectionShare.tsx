@@ -25,13 +25,13 @@ export default function SelectionShare({ title }: Props) {
 
   const text = `“${snippet}” — ${title}`;
   const wa = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-  const x  = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+  const x = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
 
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
       <div className="floating-share">
-        <Quote className="h-4 w-4 text-white/80" />
-        <span className="hidden sm:inline text-sm text-white/80">Compartir selección</span>
+        <Quote className="h-4 w-4 text-black" />
+        <span className="hidden sm:inline text-sm font-bold text-black uppercase">Compartir selección</span>
         <a className="btn-share" href={wa} target="_blank" rel="noopener noreferrer" aria-label="Compartir selección por WhatsApp">
           <MessageCircle className="h-4 w-4" /><span className="hidden sm:inline">WhatsApp</span>
         </a>

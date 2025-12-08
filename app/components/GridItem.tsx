@@ -36,17 +36,17 @@ export function GridItem({ item, className }: { item: any; className?: string })
 
   return (
     <div
-      className={`relative rounded-2xl overflow-hidden ${className ?? ''}`}
+      className={`relative border-2 border-black bg-white transition-transform hover:-translate-y-1 hover:shadow-brutal ${className ?? ''}`}
       style={
         isMobile
           ? {
-              gridColumn: `span ${col} / span ${col}`,
-              gridRow: `span ${row} / span ${row}`,
-            }
+            gridColumn: `span ${col} / span ${col}`,
+            gridRow: `span ${row} / span ${row}`,
+          }
           : undefined
       }
     >
-      <Link href={getHref(item)} className="block w-full h-full">
+      <Link href={getHref(item)} className="block w-full h-full group">
         <div
           className="relative w-full h-full"
           style={isMobile ? { minHeight: `${row * 15}vh` } : undefined}
@@ -56,7 +56,7 @@ export function GridItem({ item, className }: { item: any; className?: string })
               src={urlFor(item.imagen_portada)!.width(1600).height(1000).url()}
               alt={item?.titulo ?? 'Publicación'}
               fill
-              className="object-cover"
+              className="object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               priority={false}
             />
@@ -65,10 +65,12 @@ export function GridItem({ item, className }: { item: any; className?: string })
           )}
         </div>
 
-        {/* Overlay solo desktop */}
-        <div className="pointer-events-none absolute inset-0 hidden sm:flex sm:flex-col sm:justify-end sm:p-4 sm:bg-black/60 sm:opacity-0 sm:hover:opacity-100 transition-opacity">
-          {!!item?.tipo && <span className="text-xs uppercase text-yellow-400">{item.tipo}</span>}
-          {!!item?.titulo && <h3 className="text-lg font-semibold text-white">{item.titulo}</h3>}
+        {/* Overlay Brutalista */}
+        <div className="absolute inset-0 flex flex-col justify-end p-4 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="bg-white border-2 border-black p-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            {!!item?.tipo && <span className="block text-xs font-bold uppercase text-brutal-accent mb-1">{item.tipo}</span>}
+            {!!item?.titulo && <h3 className="text-lg font-black uppercase text-black leading-tight">{item.titulo}</h3>}
+          </div>
         </div>
       </Link>
     </div>

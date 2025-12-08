@@ -5,62 +5,69 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ----- Ajustes globales y variables ----- */
-:root {
-  color-scheme: dark;
-  /* Altura base del header fijo en móvil (h-20 = 80px) + notch-safe */
-  --nav-h: calc(80px + env(safe-area-inset-top, 0px));
+/* --- Strict Layout Reset (User Prompt) --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* Aumenta la altura efectiva del offset en pantallas mayores,
-   en sintonía con h-24 (96px) y h-28 (112px) del Header */
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+}
+
+.contenedor-principal,
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ----------------------------------------- */
+
+:root {
+  /* Brutalist Theme Variables */
+  --bg-primary: #F3EFE0;
+  --text-primary: #121212;
+  --nav-h: calc(64px + env(safe-area-inset-top, 0px));
+}
+
 @media (min-width: 768px) {
   :root {
-    --nav-h: 96px;
+    --nav-h: 80px;
   }
 }
 
 @media (min-width: 1024px) {
   :root {
-    --nav-h: 112px;
+    --nav-h: 96px;
   }
 }
 
 html {
   -webkit-font-smoothing: antialiased;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 
-/* ----- Utilities personalizadas ----- */
+body {
+  @apply bg-brutal-bg text-brutal-dark font-sans;
+}
+
+/* ----- Utilities ----- */
 @layer utilities {
-
-  .spacer-after-header-sm {
-      height: 24px;
-    }
-  
-    /* ~mt-6 */
-    .spacer-after-header-md {
-      height: 32px;
-    }
-  
-    /* ~mt-8 */
-  
-    /* Si tu Sidebar es fixed, estas ayudan a que NO quede tapado por el header */
-    .top-after-header {
-      top: var(--nav-h);
-    }
-  
-    .h-below-header {
-      height: calc(100vh - var(--nav-h));
-    }
-
-  /* Offset global para no quedar bajo el header fijo */
-  .pt-nav {
-    padding-top: var(--nav-h);
+  .brutal-border {
+    @apply border-2 border-black;
   }
 
-  /* Útil si haces scroll a #anclas en títulos */
-  .anchor-safe {
-    scroll-margin-top: var(--nav-h);
+  .brutal-shadow {
+    @apply shadow-brutal;
+  }
+
+  .pt-nav {
+    padding-top: var(--nav-h);
   }
 
   /* Grid mobile con mínimos 30% de viewport y variación por spans */
@@ -83,42 +90,48 @@ html {
   @media (min-width: 1024px) {
     .grid-mobile-safe {
       grid-template-columns: repeat(6, minmax(0, 1fr));
+      grid-auto-rows: 12rem;
     }
   }
 }
 
-/* ----- Components (botones, tipografía, glass, share, toasts) ----- */
+/* ----- Components ----- */
 @layer components {
   .btn {
-    @apply inline-flex items-center rounded-xl px-4 py-2 text-sm transition;
+    @apply inline-flex items-center justify-center px-6 py-2 text-sm font-bold uppercase tracking-wide border-2 border-black bg-white transition-all duration-200 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none hover:shadow-brutal;
   }
 
   .btn-primary {
-    @apply bg-white/10 border border-white/10 hover:bg-white/20;
+    @apply bg-brutal-dark text-brutal-bg hover:bg-black hover:text-white shadow-brutal;
   }
 
+  /* Typography override for articles */
   .article {
-    @apply prose prose-invert prose-lg max-w-3xl mx-auto;
+    @apply prose prose-lg max-w-3xl mx-auto prose-headings:font-bold prose-headings:uppercase prose-p:font-medium;
   }
 
-  /* Glass card container */
-  .card-glass {
-    @apply rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-4 sm:p-5 shadow-lg shadow-black/20;
+  .article img {
+    @apply border-2 border-black shadow-brutal;
   }
 
-  /* Share button: pill, glass, focus ring accesible */
+  /* Brutalist Card */
+  .card-brutal {
+    @apply bg-white border-2 border-black p-4 sm:p-6 shadow-brutal transition-transform hover:-translate-y-1;
+  }
+
+  /* Share button: Brutalist pill */
   .btn-share {
-    @apply inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm text-white/90 border border-white/10 bg-white/5 hover:bg-white/10 active:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30 transition;
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-bold border-2 border-black bg-white text-black hover:bg-black hover:text-white transition-colors uppercase shadow-[2px_2px_0_0_#000] active:translate-y-[1px] active:shadow-none;
   }
 
-  /* Floating share bar style */
+  /* Floating share bar style: Solid block */
   .floating-share {
-    @apply flex items-center gap-2 rounded-full border border-white/10 bg-black/60 backdrop-blur px-3.5 py-2 shadow-lg shadow-black/30;
+    @apply flex items-center gap-2 border-2 border-black bg-white px-3.5 py-2 shadow-brutal;
   }
 
-  /* Mini toast used by ShareBar copy */
+  /* Toast: High contrast */
   .toast-mini {
-    @apply fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] px-3 py-1.5 text-sm text-white/90 rounded-full bg-black/70 border border-white/10;
+    @apply fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] px-4 py-2 text-sm font-bold text-white bg-black border-2 border-white shadow-brutal;
     animation: toast-pop 1.2s ease both;
   }
 }

@@ -20,7 +20,7 @@ async function getContent() {
   const items = await client.fetch(CONTENT_QUERY, {}, {
     cache: 'no-store', // ¡Importante! Para que cambie en cada carga
   });
-  
+
   // La magia del Caos: Barajar el array en el servidor
   return items.sort(() => Math.random() - 0.5);
 }
@@ -29,7 +29,7 @@ export default async function HomePage() {
   const shuffledItems = await getContent();
 
   return (
-    <div>
+    <div className="pt-8 px-6 md:px-8">
       <h1 className="text-4xl font-bold mb-6">El Escritorio</h1>
       <ContentGrid items={shuffledItems} />
     </div>

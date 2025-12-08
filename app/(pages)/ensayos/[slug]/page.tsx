@@ -41,8 +41,8 @@ export default async function EnsayoSlugPage({ params }: { params: { slug: strin
   const excerpt = data.resumen && data.resumen.length > 0 ? data.resumen : undefined
 
   return (
-    <div className="px-4 sm:px-6">
-      <article className="prose prose-invert prose-lg max-w-4xl mx-auto pt-6">
+    <div className="px-4 sm:px-6 pt-nav mt-8 md:mt-12">
+      <article className="prose prose-lg max-w-4xl mx-auto pt-6">
         {/* Cover image */}
         {data.imagen_portada && (
           <div className="relative w-full h-96 mb-8">
@@ -50,7 +50,7 @@ export default async function EnsayoSlugPage({ params }: { params: { slug: strin
               src={urlFor(data.imagen_portada)!.url()}
               alt={data.titulo}
               fill
-              className="object-cover rounded-lg"
+              className="object-cover rounded-none shadow-brutal border-2 border-black"
               sizes="100vw"
               priority
             />
@@ -58,10 +58,10 @@ export default async function EnsayoSlugPage({ params }: { params: { slug: strin
         )}
 
         {/* Title */}
-        <h1 className="mb-2">{data.titulo}</h1>
+        <h1 className="mb-2 uppercase font-black">{data.titulo}</h1>
 
         {/* Meta and tags */}
-        <div className="text-gray-400 mb-6">
+        <div className="text-gray-700 font-medium mb-6">
           Publicado el:{' '}
           {data.fecha_publicacion
             ? new Date(data.fecha_publicacion).toLocaleDateString('es-CL')
@@ -78,7 +78,7 @@ export default async function EnsayoSlugPage({ params }: { params: { slug: strin
           </div>
         </div>
 
-        
+
 
         {/* Body */}
         {data.cuerpo_texto ? <PortableText value={data.cuerpo_texto} /> : null}

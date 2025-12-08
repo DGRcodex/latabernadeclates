@@ -1,4 +1,4 @@
-// app/layout.tsx
+import { RecentPostsSidebar } from './components/RecentPostsSidebar';
 import './globals.css';
 import Script from 'next/script';
 import { SidebarProvider } from './context/SidebarContext';
@@ -14,8 +14,9 @@ export default function RootLayout({
   const clarityId = process.env.NEXT_PUBLIC_CLARITY_ID; // poner en .env.local
 
   return (
-    <html lang="es" className="antialiased">
+    <html lang="es" className="antialiased overflow-x-hidden w-full">
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         {process.env.NODE_ENV === 'production' && clarityId && (
           <Script id="ms-clarity" strategy="afterInteractive">
             {`
@@ -28,20 +29,25 @@ export default function RootLayout({
           </Script>
         )}
       </head>
-      <body className="bg-gray-900 text-white min-h-screen">
+      <body className="bg-brutal-bg text-brutal-dark font-sans antialiased overflow-x-hidden w-full">
         <SidebarProvider>
-          {/* Header fijo (altura h-20 = 80px) */}
-          <Header />
+          <div className="relative w-full min-h-screen overflow-x-hidden">
+            {/* Header fijo (altura h-20 = 80px) */}
+            <Header />
 
-          {/* Sidebar (Client) con contenido (Server) */}
-          <Sidebar>
-            <SidebarContent />
-          </Sidebar>
+            {/* Sidebar de Recientes (Derecha) */}
+            <RecentPostsSidebar />
 
-          {/* Contenido principal: offset para no quedar bajo el header */}
-          <main className="pt-nav p-6 md:p-8">
-            {children}
-          </main>
+            {/* Sidebar (Client) con contenido (Server) */}
+            <Sidebar>
+              <SidebarContent />
+            </Sidebar>
+
+            {/* Contenido principal: offset para no quedar bajo el header */}
+            <main className="pt-nav">
+              {children}
+            </main>
+          </div>
         </SidebarProvider>
       </body>
     </html>

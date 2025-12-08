@@ -23,8 +23,8 @@ export default async function SobreMiPage() {
 
   if (!data) {
     return (
-      <section className={`px-4 ${pageTop}`}>
-        <div className="mx-auto max-w-4xl text-center text-sm text-zinc-400">
+      <section className={`px-4 pt-nav`}>
+        <div className="mx-auto max-w-4xl text-center text-sm text-zinc-600 mt-12">
           No se encontró el monólogo. Ve al Studio y escríbelo.
         </div>
       </section>
@@ -32,11 +32,20 @@ export default async function SobreMiPage() {
   }
 
   return (
-    <section className={`px-4 ${pageTop}`}>
-      <article className="prose prose-invert prose-lg mx-auto max-w-3xl">
-        <h1 className="mb-6 anchor-safe">{data.nombre ?? 'Sobre mí'}</h1>
-        <PortableText value={data.monologo_presentacion} />
-      </article>
+    <section className={`px-4 md:px-8 pt-nav pb-12`}>
+      <div className="card-brutal max-w-3xl mx-auto mt-8 relative">
+        {/* Decorative corner element */}
+        <div className="absolute -top-3 -left-3 w-6 h-6 bg-black z-0" aria-hidden="true" />
+
+        <article className="prose prose-lg mx-auto relative z-10 pt-4">
+          <h1 className="mb-6 font-black uppercase text-4xl border-b-4 border-black inline-block pb-2">
+            {data.nombre ?? 'Sobre mí'}
+          </h1>
+          <div className="text-black font-medium leading-relaxed">
+            <PortableText value={data.monologo_presentacion} />
+          </div>
+        </article>
+      </div>
     </section>
   )
 }
